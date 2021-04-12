@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { updateSourceFile } from 'typescript';
 
 interface IScene {
     width: number;
@@ -85,6 +86,38 @@ const Ball: React.FC<IBall> = () => {
         <circle cx={transform.position.x} cy={transform.position.y} r="40" stroke="green" strokeWidth="4" fill="yellow" />
     );
 }
+
+interface IAvatar {
+    targetPosition: IVector2
+}
+
+const Avatar: React.FC<IAvatar> = ( {targetPosition: IVector2} ) => {
+    const [ transform, setTransform ] = useTransform();
+    const speed = 5
+    useEffect(() => {
+        let running = true;
+        const update = () => {
+            setTransform((prevTransform) => ({
+                ...prevTransform,
+                position: {
+                    ...prevTransform.position,
+                    x: prevTransform.position.x + (speed / 60),
+                }
+            }));
+
+            if (running){
+                window.requestAnimationFrame(update)
+            }
+        };
+        window.requestAnimationFrame(update);
+        return (() => {
+            running = false;
+        });
+    }, [targetPosition, setTransform]);
+    return (
+        <circle cx={transform.position.x} cy={transform.position.y} r="40" stroke="green" strokeWidth="4" fill="yellow" />
+    );
+};
 
 const Scene: React.FC<IScene> = ({width, height}) => {
     return (
