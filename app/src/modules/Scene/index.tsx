@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { updateSourceFile } from 'typescript';
+import React, { useRef, useEffect } from 'react';
+import * as PIXI from 'pixi.js';
 
-interface IScene {
-    width: number;
-    height: number;
-}
-
+/*
 interface IVector2 {
     x: number;
     y: number;
@@ -118,15 +114,56 @@ const Avatar: React.FC<IAvatar> = ( {targetPosition} ) => {
         <circle cx={transform.position.x} cy={transform.position.y} r="40" stroke="green" strokeWidth="4" fill="yellow" />
     );
 };
+*/
+
+let type = "WebGL"
+if(!PIXI.utils.isWebGLSupported()){
+    type = "canvas"
+}
+PIXI.utils.sayHello(type)
+
+let app = new PIXI.Application({
+    width: 1024,
+    height: 1024
+});
+
+const bunny = PIXI.Sprite.from("bunny.jpg");
+bunny.anchor.set(0.5);
+bunny.x = app.screen.width / 2;
+bunny.y = app.screen.width / 2;
+
+app.stage.addChild(bunny);
+
+const basicText = new PIXI.Text('Basic text in pixi');
+basicText.x = 50;
+basicText.y = 100;
+
+app.stage.addChild(basicText);
+//asdf
+app.ticker.add((delta) => {
+    
+});
+
+interface IScene {
+    width: number;
+    height: number;
+}
 
 const Scene: React.FC<IScene> = ({width, height}) => {
+    const pixiContainer = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (pixiContainer != undefined && pixiContainer.current != undefined){
+            pixiContainer.current.appendChild(app.view);
+        }
+        /*return(() => {
+            if (pixiContainer != undefined && pixiContainer.current != undefined){
+                pixiContainer.current.removeChild(app.view);
+            }
+        })*/
+    }, []);
     return (
-        <div>
-            <svg width={width} height={height}>
-                <rect x="0" y="0" width={width} height={height} fill="gray" />
-                <Avatar targetPosition={{x: 400, y:400}} />
-                <Ball />
-            </svg>
+        <div ref={pixiContainer}>
+
         </div>
     );
 }
