@@ -91,7 +91,7 @@ interface IAvatar {
     targetPosition: IVector2
 }
 
-const Avatar: React.FC<IAvatar> = ( {targetPosition: IVector2} ) => {
+const Avatar: React.FC<IAvatar> = ( {targetPosition} ) => {
     const [ transform, setTransform ] = useTransform();
     const speed = 5
     useEffect(() => {
@@ -123,6 +123,8 @@ const Scene: React.FC<IScene> = ({width, height}) => {
     return (
         <div>
             <svg width={width} height={height}>
+                <rect x="0" y="0" width={width} height={height} fill="gray" />
+                <Avatar targetPosition={{x: 400, y:400}} />
                 <Ball />
             </svg>
         </div>

@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <Scene width={100} height={100}></Scene>
+      <Scene width={1000} height={1000}></Scene>
     </div>
   );
 }
